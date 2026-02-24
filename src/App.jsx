@@ -389,10 +389,34 @@ function Ticker() {
     </div>
   )
 }
+function SimpleSlider({ images }) {
+  const [current, setCurrent] = useState(0);
+  const next = () => setCurrent((current + 1) % images.length);
+  const prev = () => setCurrent((current - 1 + images.length) % images.length);
 
-/* ══════════════════════════════
-   SERVICES  (tabbed like emovur)
-══════════════════════════════ */
+  return (
+    <div style={{position: 'relative', width: '100%', height: '400px', overflow: 'hidden'}}>
+      {images.map((src, i) => (
+        <img 
+          key={i} 
+          src={src} 
+          alt={`Slide ${i}`} 
+          style={{
+            position: 'absolute', 
+            top: 0, 
+            left: `${(i - current) * 100}%`, 
+            width: '100%', 
+            height: '100%', 
+            transition: 'left 0.5s ease'
+          }} 
+        />
+      ))}
+      <button onClick={prev} style={{position: 'absolute', top: '50%', left: 10, background: 'rgba(0,0,0,0.5)', color: 'white', border: 'none', padding: '10px', cursor: 'pointer'}}>❮</button>
+      <button onClick={next} style={{position: 'absolute', top: '50%', right: 10, background: 'rgba(0,0,0,0.5)', color: 'white', border: 'none', padding: '10px', cursor: 'pointer'}}>❯</button>
+    </div>
+  );
+}
+
 function Services() {
   const [ref, vis] = useInView(0.08)
   const [tab, setTab] = useState(0)
@@ -403,6 +427,15 @@ function Services() {
       <div style={{maxWidth:1200,margin:'0 auto'}}>
         <p className={`rv lbl ${vis?'on':''}`}>SERVICES</p>
         <div style={{display:'flex',justifyContent:'space-between',alignItems:'flex-end',flexWrap:'wrap',gap:24,marginBottom:40}}>
+          // Replace the tab content return with:
+           <div style={{display: 'flex', gap: '40px', alignItems: 'flex-start'}}>
+           <div style={{flex: 1}}>
+           <p style={{...}}> {/* Existing description */}</p>
+         <ul className="ck"> {/* Existing checklist */}</ul>
+         </div>
+       <div style={{position: 'relative', width: '50%', height: '400px'}}> {/* Image stack above */}</div>
+      </div>
+
           <h2 className={`rv d1 ${vis?'on':''}`} style={{fontFamily:FONT,fontSize:'clamp(28px,5vw,52px)',fontWeight:800,letterSpacing:'-.03em',color:INK,lineHeight:1.05}}>
             What We Do
           </h2>
@@ -435,11 +468,111 @@ function Services() {
             <ul className="ck">
               {s.list.map(f=><li key={f}>{f}</li>)}
             </ul>
+ <SimpleSlider images={[
+  'https://via.placeholder.com/800x400?text=Dashboard+1',
+  'https://via.placeholder.com/800x400?text=Happy+Customers',
+  'https://via.placeholder.com/800x400?text=Analytics'
+]} />
+            
+            // Inside Services() component, after the <ul className="ck">...</ul>
+<div style={{position: 'relative', width: '50%', height: '400px', marginLeft: 'auto'}}> {/* Adjust width for layout */}
+  <img 
+    src="https://via.placeholder.com/600x400?text=Dashboard+1" 
+    alt="Dashboard 1" 
+    style={{
+      position: 'absolute', 
+      top: 0, 
+      left: 0, 
+      width: '80%', 
+      boxShadow: '0 10px 30px rgba(0,0,0,0.15)', 
+      borderRadius: '12px', 
+      transform: 'rotate(-5deg)'
+    }} 
+  />
+  <img 
+    src="https://via.placeholder.com/600x400?text=Happy+Customers" 
+    alt="Dashboard 2" 
+    style={{
+      position: 'absolute', 
+      top: '40px', 
+      left: '100px', 
+      width: '80%', 
+      boxShadow: '0 10px 30px rgba(0,0,0,0.15)', 
+      borderRadius: '12px', 
+      transform: 'rotate(3deg)'
+    }} 
+  />
+  <img 
+    src="https://via.placeholder.com/600x400?text=Analytics" 
+    alt="Dashboard 3" 
+    style={{
+      position: 'absolute', 
+      top: '80px', 
+      left: '200px', 
+      width: '80%', 
+      boxShadow: '0 10px 30px rgba(0,0,0,0.15)', 
+      borderRadius: '12px', 
+      transform: 'rotate(-2deg)'
+    }} 
+  />
+</div>
           </div>
         </div>
       </div>
     </section>
   )
+}
+
+function Dashboard() {
+  const [ref, visible] = useInView(0.1);
+  return (
+    <section id="dashboard" ref={ref} className={`rv ${visible ? 'on' : ''}`} style={{padding: 'clamp(60px,8vw,100px) 5%'}}>
+      <div style={{maxWidth: 1200, margin: '0 auto'}}>
+        <span className="lbl">Our Platform</span>
+        <h2 style={{fontSize: 'clamp(32px,4vw,48px)', fontWeight: 800, marginBottom: 16}}>Command Center Dashboard</h2>
+        <p style={{fontSize: 18, color: GRAY, maxWidth: 600, marginBottom: 48}}>Centralized hub for AI-driven marketing and client management.</p>
+        
+        {/* Dashboard Mockup */}
+        <div style={{background: LGRAY, borderRadius: 16, padding: 32, display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 24}}>
+          {/* Wallet Balance Card */}
+          <div style={{background: WHITE, borderRadius: 12, padding: 20, boxShadow: '0 4px 12px rgba(0,0,0,0.1)'}}>
+            <h3 style={{fontSize: 16, fontWeight: 600, marginBottom: 8}}>Wallet Balance</h3>
+            <p style={{fontSize: 24, fontWeight: 800, color: BLUE}}>₹22,580</p>
+            <p style={{fontSize: 14, color: GRAY}}>Add Funds</p>
+          </div>
+          
+          {/* WhatsApp Business API Status */}
+          <div style={{background: WHITE, borderRadius: 12, padding: 20, boxShadow: '0 4px 12px rgba(0,0,0,0.1)'}}>
+            <h3 style={{fontSize: 16, fontWeight: 600, marginBottom: 8}}>WhatsApp Business API Status</h3>
+            <p style={{fontSize: 18, color: 'green'}}>Active</p>
+            <p style={{fontSize: 14, color: GRAY}}>High Quality</p>
+          </div>
+          
+          {/* Messaging Limits */}
+          <div style={{background: WHITE, borderRadius: 12, padding: 20, boxShadow: '0 4px 12px rgba(0,0,0,0.1)'}}>
+            <h3 style={{fontSize: 16, fontWeight: 600, marginBottom: 8}}>Messaging Limits</h3>
+            <p style={{fontSize: 24, fontWeight: 800}}>10,000/day</p>
+          </div>
+          
+          {/* Other cards – add more as needed */}
+          <div style={{background: WHITE, borderRadius: 12, padding: 20, boxShadow: '0 4px 12px rgba(0,0,0,0.1)'}}>
+            <h3 style={{fontSize: 16, fontWeight: 600, marginBottom: 8}}>Emovur Profile</h3>
+            <p style={{fontSize: 14, color: GRAY}}>+91 80977 74255</p>
+            <p style={{fontSize: 14, color: BLUE}}>View Profile</p>
+          </div>
+        </div>
+        
+        {/* Navigation Tabs like in screenshot */}
+        <div style={{display: 'flex', gap: 20, marginTop: 32, justifyContent: 'center'}}>
+          <button className="stab act">WhatsApp API</button>
+          <button className="stab">Chat Inbox</button>
+          <button className="stab">CRM</button>
+          <button className="stab">Review</button>
+          <button className="stab">Social Post</button>
+        </div>
+      </div>
+    </section>
+  );
 }
 
 /* ══════════════════════════════
